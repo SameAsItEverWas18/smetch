@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+#
+
+lower() {
+    # Usage: lower "string"
+    printf '%s\n' "${1,,}"
+}
+
+distro() {
+    . /etc/os-release
+    distro="${PRETTY_NAME}"
+}
+
+
+uptime() {
+    s=$(< /proc/uptime)
+    s=${s/.*}
+
+    ((d=s/60/60/24, h=s/60/60%24, m=s/60%60))
+
+    ((d)) && uptime+="${d}d "
+    ((h)) && uptime+="${h}h "
+    ((m)) && uptime+="${m}m"
+}
+
+memory() {
+    while IFS=: read -r a b; do
+        b=${b/kB}
+
+        case $a in
+            MemTotal)((mem_used+=b,mem_total=b)) ;;
+            Shmem)((mem_used+=b)) ;;
+            MemFree|Buffers|Cached|SReclaimable) ((mem_used-=b)) ;;
+        esac
+    done </proc/meminfo
+
+    ((mem_used/=1024,mem_total/=1024))
+}
+
+
+
+{
+distro
+uptime
+memory
+} 2>/dev/null
+
+distro=$(echo "$distro" | awk '{print $1;}')
+
+echo "
+ ______________
+|[]            | OS	$distro
+|  __________  | KRNL	"$(uname -rsm)"
+|  |        |  | PC	"$(< /sys/devices/virtual/dmi/id/product_version) ""$(< /sys/devices/virtual/dmi/id/product_name)"
+|  | Truly  |  | UP	$uptime
+|  |________|  | MEM	"${mem_used}M/${mem_total}M"
+|   ________   | CPU   "$(grep -m 1 'model name' /proc/cpuinfo | sed -e 's/model name//g' | tr -d ':' | tr -d '(R)' | tr -d '(TM)' | tr -d '@')" "$(nproc)" Core(s)
+|   [ [ ]  ]   | GPU   "$(lspci | grep -m 1 'VGA' | sed -e 's/01:00.0 VGA compatible controller://g' | sed -e 's/(rev a1)//g' | sed -e 's/Corporation//g')"
+\___[_[_]__]___| SAME   As It Ever Was
+"
+
+
+
+
