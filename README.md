@@ -1,7 +1,7 @@
 # smetch
 (superior) fork of dfetch
 
-git clone https://github.com/SameAsItEverWas18/smetch.git
-cd smetch
-sudo (or doas) mv * /usr/bin/
-smetch
+1.git clone https://github.com/SameAsItEverWas18/smetch.git
+2.cd smetch
+3.sudo (or doas) mv * /usr/bin/
+4.smetch
