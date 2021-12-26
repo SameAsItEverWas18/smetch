@@ -7,8 +7,8 @@
 
 3.rm LICENSE README.md
 
-3.sudo (or doas) chmod +x *
+4.sudo (or doas) chmod +x *
 
-4.sudo (or doas) mv * /usr/bin/
+5.sudo (or doas) mv * /usr/bin/
 
-5.smetch
+6.smetch
