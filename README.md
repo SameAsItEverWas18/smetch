@@ -5,6 +5,8 @@
 
 2.cd smetch
 
+3.rm LICENSE README.md
+
 3.sudo (or doas) chmod +x *
 
 4.sudo (or doas) mv * /usr/bin/
