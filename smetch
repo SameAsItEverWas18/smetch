@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-lower() {
-    # Usage: lower "string"
-    printf '%s\n' "${1,,}"
-}
 
 distro() {
     . /etc/os-release
