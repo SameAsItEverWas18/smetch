@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-distro() {
-    . /etc/os-release
-    distro="${PRETTY_NAME}"
-}
-
 uptime() {
     s=$(< /proc/uptime)
     s=${s/.*}
@@ -31,25 +26,18 @@ memory() {
 }
 
 {
-distro
 uptime
 memory
 } 2>/dev/null
 
-distro=$(echo "$distro" | awk '{print $1;}')
-
 echo "
  ______________
-|[]            | OS	$distro
-|  __________  | KRNL	"$(uname -rsm)"
-|  |        |  | PC	"$(< /sys/devices/virtual/dmi/id/product_version) ""$(< /sys/devices/virtual/dmi/id/product_name)"
-|  | Truly  |  | UP	$uptime
-|  |________|  | MEM	"${mem_used}M/${mem_total}M"
+|[]            | OS     "$(grep -m 1 'PRETTY_NAME' /etc/os-release | sed -s 's/PRETTY_NAME=//g')"
+|  __________  | KRNL   "$(uname -rsm)"
+|  |        |  | PC     "$(< /sys/devices/virtual/dmi/id/product_version) ""$(< /sys/devices/virtual/dmi/id/product_name)"
+|  | Truly  |  | UP     $uptime
+|  |________|  | MEM    "${mem_used}M/${mem_total}M"
 |   ________   | CPU   "$(grep -m 1 'model name' /proc/cpuinfo | sed -e 's/model name//g' | tr -d ':' | tr -d '(R)' | tr -d '(TM)' | tr -d '@')" "$(nproc)" Core(s)
 |   [ [ ]  ]   | GPU   "$(lspci | grep -m 1 'VGA' | sed -e 's/01:00.0 VGA compatible controller://g' | sed -e 's/(rev a1)//g' | sed -e 's/Corporation//g')"
 \___[_[_]__]___| BAT    "$(< /sys/class/power_supply/BAT0/capacity)"%
 "
-
-
-
-
