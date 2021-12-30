@@ -5,10 +5,12 @@
 
 2.cd smetch
 
-3.rm LICENSE README.md
+3.
 
-4.sudo (or doas) chmod +x *
+4.sudo chmod +x smetch
 
-5.sudo (or doas) mv * /usr/bin/
+5.sudo mv * /usr/bin/
 
 6.smetch
+
+7. Optional - if you want smetch to launch on every terminal instance, add "smetch" to the end of your ~/.bashrc
